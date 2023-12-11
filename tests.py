@@ -65,6 +65,7 @@ class CupcakeViewsTestCase(TestCase):
             })
 
     def test_get_cupcake(self):
+        """testing if route returns single cupcake json"""
         with app.test_client() as client:
             url = f"/api/cupcakes/{self.cupcake_id}"
             resp = client.get(url)
@@ -82,6 +83,7 @@ class CupcakeViewsTestCase(TestCase):
             })
 
     def test_create_cupcake(self):
+        """testing if route creates an instances of cupcake"""
         with app.test_client() as client:
             url = "/api/cupcakes"
             resp = client.post(url, json=CUPCAKE_DATA_2)
@@ -106,12 +108,15 @@ class CupcakeViewsTestCase(TestCase):
             self.assertEqual(Cupcake.query.count(), 2)
 
     def test_update_cupcake(self):
+        """testing if route successfully updates cupcake instance if not all fields
+        are inputted"""
         with app.test_client() as client:
             url = f"/api/cupcakes/{self.cupcake_id}"
             resp = client.patch(url, json={"flavor": "UpdatedFlavor",
                                            "size": "UpdatedSize"})
 
             # cupcake_id = resp.json['cupcake']['id']
+            self.assertEqual(resp.status_code, 200)
 
             self.assertEqual(resp.json, {
                 "cupcake": {
@@ -123,3 +128,18 @@ class CupcakeViewsTestCase(TestCase):
                 }
             })
             self.assertEqual(Cupcake.query.count(), 1)
+
+
+    def test_delete_cupcake(self):
+        """testing if cupcake instance is succesfully deleted"""
+        with app.test_client() as client:
+            url = f"/api/cupcakes/{self.cupcake_id}"
+            resp = client.delete(url)
+
+            self.assertEqual(resp.status_code, 200)
+
+            self.assertEqual(resp.json, {
+                "deleted": [self.cupcake_id]
+            })
+
+
