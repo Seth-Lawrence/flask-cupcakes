@@ -71,34 +71,42 @@ def update_cupcake(cupcake_id):
     accept JSON {flavor, size, rating, image_url} but not all field required
     returns newly updated cupcake {cupcake: id, flavor,size,rating,image_url}"""
 
-    cupcake_instance = Cupcake.query.get_or_404(cupcake_id)
+    cupcake = Cupcake.query.get_or_404(cupcake_id)
 
     # turn to an object loop -> key:value pairs
     # if request.json['flavor'] true -> assign if not -> current value
     # turn to object?
     # flavor = request.get(flavor, current_value).json()
 
-    data = request.json()
+    data = request.json
 
-    cupcake_instance.flavor = data.get("flavor",cupcake_instance.flavor)
-    cupcake_instance.size = data.get("size",cupcake_instance.size)
-    cupcake_instance.rating = data.get("rating",cupcake_instance.rating)
-    cupcake_instance.image_url = data.get("image_url",cupcake_instance.image_url)
+    cupcake.size = data.get("size",cupcake.size)
+    cupcake.rating = data.get("rating",cupcake.rating)
+    cupcake.flavor = data.get("flavor",cupcake.flavor)
+    cupcake.image_url = data.get("image_url",cupcake.image_url)
 
-    db.session.add(cupcake_instance)
+    db.session.add(cupcake)
     db.session.commit()
 
-    serialized = cupcake_instance.serialize()
+    serialized = cupcake.serialize()
 
-    return jsonify(cupcake_instance=serialized)
-
-
+    return jsonify(cupcake=serialized)
 
 
-@app.route('/api/cupcakes/<int:cupcake-id>',methods=['DELETE'])
-def delete_cupcake():
-    """Updating a cupcake by id"""
-    ...
+
+@app.route('/api/cupcakes/<int:cupcake_id>',methods=['DELETE'])
+def delete_cupcake(cupcake_id):
+    """Deleting a cupcake by id
+    Return JSON {deleted: [cupcake_id]}"""
+
+    cupcake = Cupcake.query.get_or_404(cupcake_id)
+
+    db.session.delete(cupcake)
+    db.session.commit()
+
+    return jsonify({"deleted": [cupcake_id]})
+
+
 
 
 
