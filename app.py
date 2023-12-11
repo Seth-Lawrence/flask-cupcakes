@@ -65,4 +65,41 @@ def create_cupcake():
     return (jsonify(cupcake=serialized), 201)
 
 
+@app.route('/api/cupcakes/<int:cupcake_id>',methods=['PATCH'])
+def update_cupcake(cupcake_id):
+    """Updating a cupcake by id
+    accept JSON {flavor, size, rating, image_url} but not all field required
+    returns newly updated cupcake {cupcake: id, flavor,size,rating,image_url}"""
+
+    cupcake_instance = Cupcake.query.get_or_404(cupcake_id)
+
+    # turn to an object loop -> key:value pairs
+    # if request.json['flavor'] true -> assign if not -> current value
+    # turn to object?
+    # flavor = request.get(flavor, current_value).json()
+
+    data = request.json()
+
+    cupcake_instance.flavor = data.get("flavor",cupcake_instance.flavor)
+    cupcake_instance.size = data.get("size",cupcake_instance.size)
+    cupcake_instance.rating = data.get("rating",cupcake_instance.rating)
+    cupcake_instance.image_url = data.get("image_url",cupcake_instance.image_url)
+
+    db.session.add(cupcake_instance)
+    db.session.commit()
+
+    serialized = cupcake_instance.serialize()
+
+    return jsonify(cupcake_instance=serialized)
+
+
+
+
+@app.route('/api/cupcakes/<int:cupcake-id>',methods=['DELETE'])
+def delete_cupcake():
+    """Updating a cupcake by id"""
+    ...
+
+
+
 
