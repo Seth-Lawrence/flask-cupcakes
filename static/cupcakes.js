@@ -13,3 +13,62 @@
 //function to make ajax request-
 //controller function to handle json
 //event listener for add button(prevent default)
+
+
+$FORM_DATA = $('.cupcakeForm');
+$CUPCAKE_LIST = $('.cupcakeList');
+
+$FORM_DATA.on('submit',getFormDataAndDisplayList)
+
+
+
+function getFormDataAndDisplayList() {
+  createNewCupcake(
+    handleFormSubmit()
+  );
+
+
+}
+
+/**
+ * GET request for the list of cupcakes in the db
+ */
+async function getCupcakeList() {
+
+  const cupcakes = await fetch ('/api/cupcakes')
+
+}
+
+
+/**
+ * lists cupcakes on homepage
+ */
+function generateCupCakeMarkup() {
+
+
+}
+
+
+function handleFormSubmit() {
+
+  const flavor = $('#flavor').val();
+  const size = $('#size').val();
+  const rating = $('#rating').val();
+  const imageUrl = $('#imageUrl').val();
+
+  return jsonify(
+    "flavor"=flavor,"size"=size,"rating"=rating,"imageUrl"=imageUrl
+  )
+}
+
+
+async function createNewCupcake(json) {
+
+  //fetch(api) {json}
+
+
+
+
+}
+
+

@@ -8,25 +8,25 @@
 <body>
   <h1>Cupcakes</h1>
 
-  <ul class="cupcake-list"></ul>
+  <ul class="cupcakeList"></ul>
 
   <h2>Add a cupcake!</h2>
-  <form action="/api/cupcakes" method="POST">
+  <form class="cupcakeForm" action="/api/cupcakes" method="POST">
     <div>
       <label for="flavor">Flavor:</label>
-      <input type="text" name="flavor">
+      <input id='flavor' type="text" name="flavor">
     </div>
     <div>
       <label for="size">Size:</label>
-      <input type="text" name="'size">
+      <input id='size' type="text" name="'size">
     </div>
     <div>
       <label for="rating">Rating:</label>
-      <input type="number" name="rating">
+      <input id='rating' type="number" name="rating">
     </div>
     <div>
-      <label for="image-url">Image URL:</label>
-      <input type="text" name="image-url">
+      <label for="imageUrl">Image URL:</label>
+      <input id='imageUrl' type="text" name="imageUrl">
     </div>
     <!-- type=submit? -->
     <button>Add Cupcake!</button>
