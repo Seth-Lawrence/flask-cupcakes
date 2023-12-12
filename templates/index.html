@@ -11,7 +11,7 @@
   <ul class="cupcakeList"></ul>
 
   <h2>Add a cupcake!</h2>
-  <form class="cupcakeForm" action="/api/cupcakes" method="POST">
+  <form class="cupcakeForm">
     <div>
       <label for="flavor">Flavor:</label>
       <input id='flavor' type="text" name="flavor">
@@ -29,11 +29,12 @@
       <input id='imageUrl' type="text" name="imageUrl">
     </div>
     <!-- type=submit? -->
-    <button>Add Cupcake!</button>
+    <button id="submitButton" type="submit">Add Cupcake!</button>
 
   </form>
 
+
   <script src="https://unpkg.com/jquery"></script>
-  <script>src="static/cupcakes.js"</script>
+  <script src="static/cupcakes.js"></script>
 </body>
 </html>

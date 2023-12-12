@@ -15,19 +15,29 @@
 //event listener for add button(prevent default)
 
 
-let $FORM_DATA = $('.cupcakeForm');
-let $CUPCAKE_LIST = $('.cupcakeList');
+const $FORM_DATA = $('.cupcakeForm');
+const $CUPCAKE_LIST = $('.cupcakeList');
+const $SUBMIT_BUTTON = $('#submitButton')
 
-$FORM_DATA.on('submit',getFormDataAndDisplayList)
+$SUBMIT_BUTTON.on('click',getFormDataAndCreateNewCupcake);
 
 
+// function sayHi(e) {
+//   e.preventDefault();
+//   console.log("hello!");
+// }
 
-function getFormDataAndCreateNewCupcake() {
+
+async function getFormDataAndCreateNewCupcake(event) {
   // createNewCupcake(
   //   handleFormSubmit()
   // );
+
+  event.preventDefault();
+  console.debug("made it here")
   const formData = getFormData();
-  createNewCupcake(formData);
+  console.debug(formData);
+  await createNewCupcake(formData);
   getCupcakeList()
 }
 
@@ -65,9 +75,10 @@ function getFormData() {
   const rating = $('#rating').val();
   const imageUrl = $('#imageUrl').val();
 
-  return jsonify(
-    "flavor"=flavor,"size"=size,"rating"=rating,"imageUrl"=imageUrl
-  )
+  return {
+    flavor,size,rating,imageUrl
+  }
+
 }
 
 
@@ -79,9 +90,9 @@ async function createNewCupcake(json) {
     `/api/cupcakes`,
     {
       method: "POST",
+      body: JSON.stringify({json}),
       headers: {
-        "Content-Type": "application/json"},
-      body: json
+        "Content-Type": "application/json"}
     }
   );
     const newCupcakeData = await response.json();
