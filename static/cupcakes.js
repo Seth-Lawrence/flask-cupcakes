@@ -15,19 +15,20 @@
 //event listener for add button(prevent default)
 
 
-$FORM_DATA = $('.cupcakeForm');
-$CUPCAKE_LIST = $('.cupcakeList');
+let $FORM_DATA = $('.cupcakeForm');
+let $CUPCAKE_LIST = $('.cupcakeList');
 
 $FORM_DATA.on('submit',getFormDataAndDisplayList)
 
 
 
-function getFormDataAndDisplayList() {
-  createNewCupcake(
-    handleFormSubmit()
-  );
-
-
+function getFormDataAndCreateNewCupcake() {
+  // createNewCupcake(
+  //   handleFormSubmit()
+  // );
+  const formData = getFormData();
+  createNewCupcake(formData);
+  getCupcakeList()
 }
 
 /**
@@ -35,21 +36,29 @@ function getFormDataAndDisplayList() {
  */
 async function getCupcakeList() {
 
-  const cupcakes = await fetch ('/api/cupcakes')
+  const response = await fetch ('/api/cupcakes');
+  const cupcakesData = await response.json();
+
+  console.log(cupcakesData)
+  for(let cupcake in cupcakesData){
+    let $cupcake = generateCupCakeMarkup(cupcake)
+    $CUPCAKE_LIST.append($cupcake)
+    }
 
 }
 
 
 /**
- * lists cupcakes on homepage
+ * generate HTML
  */
-function generateCupCakeMarkup() {
-
-
+function generateCupCakeMarkup(cupcake) {
+return `
+  <li>${cupcake.flavor}, ${cupcake.size}, ${cupcake.rating}</li>
+`
 }
 
 
-function handleFormSubmit() {
+function getFormData() {
 
   const flavor = $('#flavor').val();
   const size = $('#size').val();
@@ -63,11 +72,22 @@ function handleFormSubmit() {
 
 
 async function createNewCupcake(json) {
+  console.log("accepts json:", json)
 
-  //fetch(api) {json}
+  // jsonify??
+  const response = await fetch(
+    `/api/cupcakes`,
+    {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json"},
+      body: json
+    }
+  );
+    const newCupcakeData = await response.json();
 
-
-
+    const $newCupcake = generateCupCakeMarkup(newCupcakeData);
+    $CUPCAKE_LIST.append($newCupcake);
 
 }
 
