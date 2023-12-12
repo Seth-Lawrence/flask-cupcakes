@@ -1,6 +1,6 @@
 import os
 
-from flask import Flask, request, jsonify
+from flask import Flask, request, jsonify, render_template
 from models import db, connect_db, Cupcake
 
 
@@ -14,6 +14,10 @@ connect_db(app)
 
 """Flask app for Cupcakes"""
 
+@app.get("/")
+def home_page():
+    """Display home page."""
+    return render_template("index.html")
 
 @app.get('/api/cupcakes')
 def get_all_cupcake_data():
@@ -68,8 +72,12 @@ def create_cupcake():
 @app.route('/api/cupcakes/<int:cupcake_id>',methods=['PATCH'])
 def update_cupcake(cupcake_id):
     """Updating a cupcake by id
-    accept JSON {flavor, size, rating, image_url} but not all field required
-    returns newly updated cupcake {cupcake: id, flavor,size,rating,image_url}"""
+    accept JSON:
+        {flavor, size, rating, image_url} but not all field required
+
+    returns newly updated cupcake:
+        {cupcake: id, flavor,size,rating,image_url}
+    """
 
     cupcake = Cupcake.query.get_or_404(cupcake_id)
 
@@ -78,8 +86,11 @@ def update_cupcake(cupcake_id):
     # turn to object?
     # flavor = request.get(flavor, current_value).json()
 
+    #.json()-method on instance
+    #.json - dict
     data = request.json
 
+    #be aware, .get will give you None if doesn't exist
     cupcake.size = data.get("size",cupcake.size)
     cupcake.rating = data.get("rating",cupcake.rating)
     cupcake.flavor = data.get("flavor",cupcake.flavor)
@@ -93,7 +104,7 @@ def update_cupcake(cupcake_id):
     return jsonify(cupcake=serialized)
 
 
-
+#@app.delete
 @app.route('/api/cupcakes/<int:cupcake_id>',methods=['DELETE'])
 def delete_cupcake(cupcake_id):
     """Deleting a cupcake by id

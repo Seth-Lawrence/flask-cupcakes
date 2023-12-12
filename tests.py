@@ -142,4 +142,23 @@ class CupcakeViewsTestCase(TestCase):
                 "deleted": [self.cupcake_id]
             })
 
+    #test_update_cupcake_404
+    #test 404s for both routes
+    def test_update_cupcake_404(self):
+        """testing if route successfully updates cupcake instance if not all fields
+        are inputted"""
+        with app.test_client() as client:
+            url = f"/api/cupcakes/99"
+            resp = client.patch(url, json={"flavor": "UpdatedFlavor",
+                                           "size": "UpdatedSize"})
 
+
+            self.assertEqual(resp.status_code, 404)
+
+    def test_delete_cupcake_404(self):
+        """testing if cupcake instance is succesfully deleted"""
+        with app.test_client() as client:
+            url = f"/api/cupcakes/99"
+            resp = client.delete(url)
+
+            self.assertEqual(resp.status_code, 404)
